@@ -5,26 +5,30 @@ import { StyledLink } from "../Link/Link.styled";
 
 export default function Product() {
   const router = useRouter();
-  const { id } = router.query;
+  const { frontendId } = router.query;
+  console.log(router.query);
 
-  const { data, isLoading } = useSWR(`/api/products/${id}`);
+  const { data: product, isLoading } = useSWR(`/api/products/${frontendId}`);
 
   if (isLoading) {
     return <h1>Loading...</h1>;
   }
 
-  if (!data) {
-    return;
+  if (!product) {
+    return "error";
   }
 
   return (
     <ProductCard>
-      <h2>{data.name}</h2>
-      <p>Description: {data.description}</p>
-      <p>
-        Price: {data.price} {data.currency}
-      </p>
-      <StyledLink href="/">Back to all</StyledLink>
+      <div>
+        <h2>{product.name}</h2>
+        <p>Description: {product.description}</p>
+        <p>
+          Price: {product.price} {product.currency}
+        </p>
+
+        <StyledLink href="/">Back to all</StyledLink>
+      </div>
     </ProductCard>
   );
 }
